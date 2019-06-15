@@ -47,8 +47,9 @@
         (q/text "Clojure" 0 0)))))
 
 (defn- draw-simple-card [c]
-  (if (:is-face-down c) (draw-simple-card-back c)
-                        (draw-simple-card-face c)))
+  (when c
+    (if (:is-face-down c) (draw-simple-card-back c)
+                          (draw-simple-card-face c))))
 
 (defrecord simple-card [])
 (defn make-simple-card [t c]
@@ -74,10 +75,7 @@
 (def card-symbols {
   :star    \u2605
   :moon    \u263E
-  :spade   \u2660
-  :club    \u2663
   :heart   \u2665
-  :diamond \u2666
 })
 
 (def card-colors {
@@ -88,6 +86,6 @@
 })
 
 (defn make-simple-card-deck []
-  (map #(apply make-simple-card %)
+  (mapv #(apply make-simple-card %)
     (for [[_ s] card-symbols [_ c] card-colors] [s c])))
 

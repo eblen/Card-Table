@@ -1,24 +1,18 @@
 (ns cardtable.table
   (:require [cardtable.cards :as c]
+            [cardtable.games :as g]
             [quil.core :as q]
             [quil.middleware :as m]))
 
-(def table-width  800)
+(def table-width  900)
 (def table-height 600)
-
-(defn throw-card [card]
-  (assoc card :angle (rand-int 360) :is-face-down (== 0 (rand-int 2))
-              :xpos (rand-int table-width) :ypos (rand-int table-height)))
-
-(defn arrange-cards [deck]
-  (mapv throw-card deck))
 
 (defn setup-table [] {
   :color [62 249 149]
-  ; For now, just toss a deck of cards all over the table
-  :cards (arrange-cards (c/make-simple-card-deck))})
+  :cards (g/start-game table-width table-height)})
 
-(defn update-table [table] table)
+(defn update-table [table]
+  (assoc table :cards (g/update-game (:cards table))))
 
 (defn draw-table [t]
   (apply q/background (:color t))

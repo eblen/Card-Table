@@ -7,9 +7,6 @@
   (q/frame-rate 30)
   (t/setup-table))
 
-(defn update-table [table]
-  (t/update-table table))
-
 (defn draw-table [table]
   (t/draw-table table))
 
@@ -17,8 +14,8 @@
   :title "Card Table"
   :size [t/table-width t/table-height]
   :setup setup-table
-  :update update-table
-  :draw draw-table
+  :update t/update-table
+  :draw t/draw-table
   :middleware [m/fun-mode])
 
 (defn -main [& args])
