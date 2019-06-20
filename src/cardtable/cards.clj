@@ -13,12 +13,13 @@
 (defprotocol CARD
   (set-angle [c a])
   (set-size  [c w h])
-  (draw   [c])
-  (move   [c x y])
-  (place  [c x y])
-  (rotate [c a])
-  (fliph  [c])
-  (flipv  [c]))
+  (draw      [c])
+  (move      [c x y])
+  (place     [c x y])
+  (rotate    [c a])
+  (fliph     [c])
+  (flipv     [c])
+  (cards-eq  [c1 c2]))
 
 (defn- draw-simple-card-face [c]
   (q/fill 255 255 255)
@@ -47,9 +48,8 @@
         (q/text "Clojure" 0 0)))))
 
 (defn- draw-simple-card [c]
-  (when c
-    (if (:is-face-down c) (draw-simple-card-back c)
-                          (draw-simple-card-face c))))
+  (if (:is-face-down c) (draw-simple-card-back c)
+                        (draw-simple-card-face c)))
 
 (defrecord simple-card [])
 (defn make-simple-card [t c]
@@ -59,18 +59,18 @@
   (set-angle [c a]   (assoc c :angle a))
   (set-size  [c w h] (assoc c :width  w
                               :height h))
-  (draw [c] (draw-simple-card c))
-
-  (move   [c x y] (assoc c :xpos (+ (:xpos c) x)
-                           :ypos (+ (:ypos c) y)))
-  (place  [c x y] (assoc c :xpos x
-                           :ypos y))
-  (rotate [c a]   (let [angle (+ (:angle c) a)]
-                    (if (>= angle 0)
-                      (mod angle 360)
-                      (- 360 (mod (Math/abs angle) 360)))))
-  (fliph  [c]     (assoc c :is-face-down (not (:is-face-down c))))
-  (flipv  [c]     (rotate (fliph c) 180)))
+  (draw      [c]     (draw-simple-card c))
+  (move      [c x y] (assoc c :xpos (+ (:xpos c) x)
+                              :ypos (+ (:ypos c) y)))
+  (place     [c x y] (assoc c :xpos x
+                              :ypos y))
+  (rotate    [c a]   (let [angle (+ (:angle c) a)]
+                       (if (>= angle 0)
+                         (mod angle 360)
+                         (- 360 (mod (Math/abs angle) 360)))))
+  (fliph     [c]     (assoc c :is-face-down (not (:is-face-down c))))
+  (flipv     [c]     (rotate (fliph c) 180))
+  (cards-eq  [c1 c2] (and (= (:text c1) (:text c2)) (= (:color c1) (:color c2)))))
 
 (def card-symbols {
   :star    \u2605

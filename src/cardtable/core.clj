@@ -12,7 +12,7 @@
 
 (q/defsketch cardtable
   :title "Card Table"
-  :size [t/table-width t/table-height]
+  :size [t/total-width t/total-height]
   :setup setup-table
   :update t/update-table
   :draw t/draw-table
