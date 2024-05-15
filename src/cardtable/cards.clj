@@ -16,7 +16,8 @@
 
 (defn init-card [c] (merge c default-card-settings))
 (defn draw [c]
-  (q/rect-mode :center)
+  (q/rect-mode  :center)
+  (q/image-mode :center)
   (q/text-align :center :center)
   (let [x (+ (:xpos c) (/ (:width  c) 2))
         y (+ (:ypos c) (/ (:height c) 2))]

@@ -1,6 +1,6 @@
 (ns cardtable.games
   (:require [cardtable.cards :as cbase]
-            [cardtable.match-cards :as c]
+            [cardtable.standard-cards :as c]
             [quil.core :as q]
             [quil.middleware :as m]))
 
@@ -61,7 +61,7 @@
   ; The "handle-mouse-click" function may select a new card and thus advance the game
   (let [deck          (if (> 2 (:num-sel-cards game)) ; prevent selecting more than 2 cards
                           (handle-mouse-click (:cards game)) (:cards game))
-        cards-eq      #(and (= (:text %1) (:text %2)) (= (:color %1) (:color %2)))
+        cards-eq      #(and (= (:rank %1) (:rank %2)) (= (:suit %1) (:suit %2)))
         sel-cards     (filter #(= false (:is-face-down (get deck %))) (range (count deck)))
         num-sel-cards (count sel-cards)]
     (cond
@@ -106,7 +106,7 @@
 ; Combine two match card decks into one deck, shuffle, and then "deal" the deck
 ; (set card positions and turn them face down)
 (defn start-game [table-width table-height]
-  (let [deck (into (c/make-match-card-deck) (c/make-match-card-deck))]
+  (let [deck (into (take 12 (c/make-standard-card-deck)) (take 12 (c/make-standard-card-deck)))]
     {:cards (deal-cards-for-match-game (shuffle deck) table-width table-height)
      :score 0
      :message "Score: 0"
